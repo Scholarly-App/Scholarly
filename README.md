@@ -1,4 +1,4 @@
-# Scholarly
+# Scholarly-App
 Scholarly; AI Driven Smart Learning Assistant
 
 ### Scope
