@@ -1,18 +1,63 @@
-# Scholarly-App
-Scholarly; AI Driven Smart Learning Assistant
+# Scholarly: AI Driven Smart Learning Assistant
 
-### Scope
-This project aims to develop an innovative educational app designed to revolutionize how students interact with and comprehend learning-based content. The app allows users to upload material and automatically generates a diverse range of assessments, including multiple-choice questions (MCQs), fill-in-the-blank exercises, and true/false questions. These assessments are designed to reinforce learning and provide immediate feedback. The app also features an intelligent grading system that evaluates student performance, highlights incorrect answers, and offers correct answers with detailed explanations, available in both AI-generated videos and summarized text formats. Additionally, the app is equipped with a feature that generates personalized learning roadmaps based on the uploaded content, supplemented by short, instructional videos to guide students through the material effectively. This project aims to enhance the learning experience by combining traditional study methods with cutting-edge AI technology, making education more interactive, personalized, and efficient.
+## 📘 Project Description
 
-### Features:
-* User Dashboard and Analytics.
-* Upload Book.
-* Generate Key Assessments (MCQs, Fill in the Blank, True/False).
-* Difficulty-Based Assessment Generation.
-* Real-Time Assessment Evaluation.
-* Performance Based Report Generation.
-* AI Generated Explanations for Incorrect Answers.
-* Content Based Roadmap Generation.
-* AI-Generated Content Explanation.
-* Topic based AI Generated Learning Videos.
-* User Authentication and Creation.
+In the modern educational era, students often struggle to maintain focus whilst watching long video lectures or learning via a textbook. The main problem here is retaining focus while studying.
+
+**Scholarly** aims to solve this problem by developing an innovative educational app to revolutionize how students comprehend and interact with learning-based content.
+
+Scholarly enables students to upload a book and automatically generate a personalized learning roadmap based on their uploaded content. The generated roadmap will act as a study plan and will allow students to track their progress as they move forward.
+
+For each topic in the roadmap, the app will provide both detailed and summarized explanations, ensuring an efficient and effective learning experience. Additionally, students will be able to generate short educational videos (reels) for their selected topics. The main objective of these reels will be to make complex topics easier to understand and learn them with great speed and accuracy, without losing focus.
+
+Furthermore, the app also features MCQ-based quiz generation, allowing students to assess their knowledge and understanding of each selected topic.
+
+The core objective of this project is to solve students’ issue of losing focus whilst studying by combining traditional study methods with cutting-edge AI technology, making education more interactive, personalized, and efficient.
+
+---
+
+## 🛠 Tech Stack
+
+- Python
+- Flutter
+- Dart
+- Flask API
+- Google Cloud Platform
+- Kaggle
+- Firebase
+- Android Studio
+
+---
+
+## 🚀 Features
+
+- ✅ User Registration and Authentication
+- ✅ User Dashboard and Analytics
+- ✅ Upload Book
+- ✅ Automatic Roadmap Generation
+- ✅ Content Based Textual Explanations
+- ✅ Topic Based Summary Generation
+- ✅ Topic Based Short Videos (Reels) Generation
+- ✅ Generate Key Assessments MCQs for Selected Topic
+- ✅ Real-Time Assessment Evaluation
+- ✅ Feedback Functionality for Generated Reels
+
+---
+
+## 📱 Sample UI Screens
+
+<!-- Add images here -->
+<!-- Example: ![Home Screen](screenshots/home.png) -->
+
+---
+
+## 🎥 Demo Video
+
+[Watch Demo](https://drive.google.com/file/d/1Aw8m-Wu0kFfK9iP9vpdW6Zz2pP6tbizq/view?usp=sharing)
+
+---
+
+## ⚙️ Installation Guide
+
+<!-- Add installation instructions here -->
+
