@@ -301,8 +301,8 @@ python mcq-app.py
 
 ---
 
-✅ **Your local server is now fully set up and functional.
+✅ Your local server is now fully set up and functional.
 - Now Finally Get your IP Address that should look like this 192.168.10.0  and in the Android Studio Navigate to lib/config.dart and update your IP Address:
 - static const String baseUrl = 'http://192.168.10.0';
-- Remember to Replace the IP Address with your current IP Address
-**
+- Remember to Replace the IP Address with your current IP Address and rerun the app
+
