@@ -12,6 +12,6 @@ Navigate to stable-diffusion-3.5-medium and get access
 Next Navigate to account setting and get your access token
 huggingface-cli login
 
-set PEXELS_API_KEY=zzPagARSt7MvmCZoqZXh9QR12nXkI1QsTIpSSfgadoAaXKbhlnn92OSB
+set PEXELS_API_KEY=Your Pexels API
 echo %PEXELS_API_KEY%
 
