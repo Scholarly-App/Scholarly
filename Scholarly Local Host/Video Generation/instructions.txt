@@ -1,0 +1,17 @@
+winget install ffmpeg
+pip install -r requirements.txt
+Open C:\Users\YourUsername\AppData\Local\Microsoft\Windows\Fonts
+Drag and drop your font files (.ttf, .otf) into this folder.
+Double-click the font files and click Install.
+
+Run in terminal
+python -m spacy download en_core_web_sm
+
+Next go to hugging face, Login
+Navigate to stable-diffusion-3.5-medium and get access
+Next Navigate to account setting and get your access token
+huggingface-cli login
+
+set PEXELS_API_KEY=zzPagARSt7MvmCZoqZXh9QR12nXkI1QsTIpSSfgadoAaXKbhlnn92OSB
+echo %PEXELS_API_KEY%
+
