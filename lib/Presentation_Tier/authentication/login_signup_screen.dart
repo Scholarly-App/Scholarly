@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:scholarly_app/Application_Tier/NotificationManager.dart';
 import '../../Application_Tier/AuthenticationHandler.dart';
 import '/Presentation_Tier/homepage/home_screen.dart';
 
@@ -228,14 +229,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           children: [
             GestureDetector(
               onTap: () {
-                Fluttertoast.showToast(
-                    msg: "Forgot Password",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.white,
-                    textColor: Color(0xFF00224F),
-                    fontSize: 14.0);
+                authHandler.showForgotPasswordDialog(context);
               },
               child: Text(
                 'Forgot Password ?  ',
@@ -274,6 +268,11 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               bool loginStatus = await authHandler.loginUser(email, password);
               if (loginStatus == true) {
                 // If login is successful, navigate to HomeScreen
+
+                //Show Welcome Notification
+                await NotificationManager.initialize();
+                NotificationManager.showWelcomeNotification();
+
                 Navigator.pushReplacement(
                   context,
                   PageRouteBuilder(
@@ -722,6 +721,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
 
               if (registerStatus == true) {
                 // Navigating to the Login Screen with Bottom-Up Transition
+
                 Navigator.pushReplacement(
                   context,
                   PageRouteBuilder(

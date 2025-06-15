@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../Data_Tier/ReelsWidget.dart';
+import '../../Application_Tier/ReelsManager.dart';
 
 class ViewReelScreen extends StatefulWidget {
   final List<String> videoUrls;
@@ -14,13 +15,80 @@ class ViewReelScreen extends StatefulWidget {
 
 class _ViewReelScreenState extends State<ViewReelScreen> {
   final PageController _pageController = PageController();
+  final ReelsManager reelsManager = ReelsManager();
 
   String getTopicName(String path) {
     List<String> parts = path.split('/');
     return parts.isNotEmpty ? parts.last : '';
   }
 
-@override
+  Future<void> _showFeedbackDialog() async {
+    TextEditingController feedbackController = TextEditingController();
+
+    bool? submitted = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          title: Text("Feedback", textAlign: TextAlign.center),
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.7,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Let us know your thoughts!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(height: 12),
+                TextField(
+                  controller: feedbackController,
+                  maxLines: 5,
+                  decoration: InputDecoration(
+                    hintText: "Type your feedback here...",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actionsAlignment: MainAxisAlignment.spaceEvenly,
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false); // cancel
+              },
+              child: Text("Cancel", style: TextStyle(color: Colors.grey[700])),
+            ),
+            TextButton(
+              onPressed: () async {
+                String feedback = feedbackController.text.trim();
+                if (feedback.isNotEmpty) {
+                  ReelsManager.submitFeedback(feedback);
+                }
+                Navigator.of(context).pop(true); // submitted
+              },
+              child: Text("Submit", style: TextStyle(color: Colors.blue)),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (submitted == true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Thanks for your feedback!")),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF00224F),
@@ -97,7 +165,7 @@ class _ViewReelScreenState extends State<ViewReelScreen> {
             right: 30,
             child: ElevatedButton(
               onPressed: () {
-                // Add feedback action here
+                _showFeedbackDialog();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF00224F),

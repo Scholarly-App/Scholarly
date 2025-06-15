@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:scholarly_app/Application_Tier/NotificationManager.dart';
 import 'firebase_options.dart';
 import '/Presentation_Tier/authentication/login_signup_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -84,7 +85,11 @@ class _SplashScreenState extends State<SplashScreen>
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         // User is logged in, navigate to HomeScreen
-        Timer(Duration(milliseconds: 3500), () {
+        Timer(Duration(milliseconds: 3500), () async {
+          //Show Welcome Notification
+          await NotificationManager.initialize();
+          NotificationManager.showWelcomeNotification();
+
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(

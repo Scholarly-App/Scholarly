@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:scholarly_app/Presentation_Tier/bookspage/roadmap_screen.dart';
@@ -140,7 +142,15 @@ class _BooksScreenState extends State<BooksScreen> {
     );
   }
 
-  void navigateToRoadmap(String bookTitle) {
+  Future<void> navigateToRoadmap(String bookTitle) async {
+    final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    String? userId = _auth.currentUser?.uid;
+
+    await dbRef.child('analytics/$userId').update({
+      'bookTitle': bookTitle,
+    });
+
     Navigator.push(
       context,
       MaterialPageRoute(

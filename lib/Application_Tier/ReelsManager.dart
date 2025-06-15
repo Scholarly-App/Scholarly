@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -21,9 +23,9 @@ class ReelsManager {
     final Uri url = Uri.parse(baseUrl);
 
     final Map<String, dynamic> data = {
-      'id':id,
-      'path':path,
-      'script':script,
+      'id': id,
+      'path': path,
+      'script': script,
       'character': character,
       'font': font,
       'text_color': textColor,
@@ -72,16 +74,30 @@ class ReelsManager {
     final response = await http.post(
       Uri.parse('${AppConfig.baseUrl}:5003/videos'),
       headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"path": path}), // Sending the path dynamically
+      body: jsonEncode({
+        "path": path,
+        "url": AppConfig.baseUrl,
+      }),
     );
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       List<String> links = List<String>.from(data['videos']);
-      Fluttertoast.showToast(msg: links.isNotEmpty ? "Videos loaded" : "No videos found");
+      Fluttertoast.showToast(
+          msg: links.isNotEmpty ? "Videos loaded" : "No videos found");
       return links;
     } else {
       throw Exception("Failed to load videos");
     }
+  }
+
+  static Future<void> submitFeedback(String feedback) async {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    final feedbackRef = FirebaseDatabase.instance.ref('feedback/$userId').push();
+
+    await feedbackRef.set({
+      'feedback': feedback,
+      'timestamp': DateTime.now().toIso8601String(),
+    });
   }
 }

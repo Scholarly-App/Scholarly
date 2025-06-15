@@ -8,6 +8,7 @@ void main() async {
   await Future.delayed(Duration(milliseconds: 50),);
   FlutterNativeSplash.remove();
   runApp(MyApp());
+
 }
 
 class MyApp extends StatelessWidget {

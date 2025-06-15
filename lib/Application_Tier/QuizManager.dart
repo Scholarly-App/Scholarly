@@ -3,7 +3,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:http/http.dart' as http;
 
 import '../config.dart';
-
 class QuizManager {
   final String baseUrl = '${AppConfig.baseUrl}:5004/generate';
 

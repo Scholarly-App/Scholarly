@@ -49,6 +49,8 @@ class AuthenticationHandler {
       if (user != null) {
         // Save user details in the Realtime Database
         DatabaseReference ref = _database.ref("users/${user.uid}");
+        ref = _database.ref("users/${user.uid}");
+
         await ref.set({
           "name": name,
           "email": email,
@@ -125,6 +127,7 @@ class AuthenticationHandler {
       return false;
     }
   }
+
   /// Logout the current user
   Future<bool> logoutUser() async {
     try {
@@ -151,9 +154,109 @@ class AuthenticationHandler {
     );
   }
 
+  Future<void> showForgotPasswordDialog(BuildContext context) async {
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController confirmEmailController =
+        TextEditingController();
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          title: Text("Forgot Password", textAlign: TextAlign.center),
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Please enter your email to reset your password.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 14),
+                ),
+                SizedBox(height: 16),
+                TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(),
+                    isDense: true,
+                  ),
+                ),
+                SizedBox(height: 12),
+                TextField(
+                  controller: confirmEmailController,
+                  decoration: InputDecoration(
+                    labelText: 'Re-enter Email',
+                    border: OutlineInputBorder(),
+                    isDense: true,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actionsAlignment: MainAxisAlignment.spaceEvenly,
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close dialog
+              },
+              child: Text("Cancel", style: TextStyle(color: Colors.grey[700])),
+            ),
+            TextButton(
+              onPressed: () {
+                if (emailController.text.trim().isNotEmpty && confirmEmailController.text.trim().isNotEmpty) {
+                  if (emailController.text.trim() ==
+                      confirmEmailController.text.trim()) {
+                    Navigator.of(context).pop(); // Close dialog
+                    Fluttertoast.showToast(
+                      msg: "Update request has been sent to your email",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.green,
+                      textColor: Colors.white,
+                      fontSize: 14.0,
+                    );
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: "Emails do not match.",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 14.0,
+                    );
+                  }
+                }
+                else{
+                  Fluttertoast.showToast(
+                    msg: "Please Provide an Email Address",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 14.0,
+                  );
+                }
+              },
+              child:
+                  Text("Update Password", style: TextStyle(color: Colors.blue)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 // /// Check if a user is already logged in
 // User? getCurrentUser() {
 //   return _auth.currentUser;
 // }
-
 }

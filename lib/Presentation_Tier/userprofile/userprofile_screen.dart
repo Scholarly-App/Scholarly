@@ -4,7 +4,6 @@ import 'package:scholarly_app/Presentation_Tier/userprofile/terms_conditions_scr
 import 'package:scholarly_app/Presentation_Tier/userprofile/update_password_screen.dart';
 import '../authentication/login_signup_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:scholarly_app/Application_Tier/AuthenticationHandler.dart';
 import 'package:scholarly_app/Data_Tier/UserModel.dart';
 import 'package:scholarly_app/Application_Tier/UserManager.dart';
@@ -145,6 +144,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>
   }
 
   Future<void> _loadUserData() async {
+
     UserModel? user = await _userManager.getUserData();
     if (mounted) {
       setState(() {

@@ -110,7 +110,7 @@ class _RoadmapScreenState extends State<RoadmapScreen> {
         ),
       ),
       body: isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(color: Colors.white,))
           : roadmapData == null
           ? const Center(child: Text("No roadmap available"))
           : ListView(
@@ -163,11 +163,21 @@ class _RoadmapScreenState extends State<RoadmapScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async{
                         // Construct the full database path
                         String databasePath =
                             "books/${FirebaseAuth.instance.currentUser
                             ?.uid}/${widget.bookTitle}/roadmap/$currentPath";
+
+                        final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
+                        final FirebaseAuth _auth = FirebaseAuth.instance;
+                        String? userId = _auth.currentUser?.uid;
+
+                        await dbRef.child('analytics/$userId').update({
+                          'screen': 1,
+                          'textPath': databasePath,
+                        });
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -188,11 +198,21 @@ class _RoadmapScreenState extends State<RoadmapScreen> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async{
                         // Construct the full database path
                         String databasePath =
                             "books/${FirebaseAuth.instance.currentUser
                             ?.uid}/${widget.bookTitle}/roadmap/$currentPath";
+
+                        final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
+                        final FirebaseAuth _auth = FirebaseAuth.instance;
+                        String? userId = _auth.currentUser?.uid;
+
+                        await dbRef.child('analytics/$userId').update({
+                          'screen': 2,
+                          'textPath': databasePath,
+                        });
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -227,213 +247,3 @@ class _RoadmapScreenState extends State<RoadmapScreen> {
     }).toList();
   }
 }
-
-//
-// List<Widget> _buildRoadmapWidgets(Map roadmap,
-//     {int level = 0, String parentPath = ""}) {
-//   final screenHeight = MediaQuery.of(context).size.height;
-//
-//   // Sort the roadmap by start_page
-//   final sortedRoadmap = roadmap.entries.toList()
-//     ..sort((a, b) {
-//       final aStartPage = (a.value as Map)['start_page'] ?? double.infinity;
-//       final bStartPage = (b.value as Map)['start_page'] ?? double.infinity;
-//       return (aStartPage as num).compareTo(bStartPage as num);
-//     });
-//
-//   return sortedRoadmap.map((entry) {
-//     String title = entry.key.toString();
-//     Map<String, dynamic> data = Map<String, dynamic>.from(entry.value as Map);
-//     Map? subRoadmap = data['sub-heading'];
-//
-//     // Construct the full path dynamically
-//     String currentPath = parentPath.isEmpty ? title : "$parentPath/$title";
-//
-//     return Card(
-//       elevation: 4,
-//       margin: EdgeInsets.only(bottom: screenHeight * 0.02),
-//       child: ExpansionTile(
-//         title:
-//         Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-//         subtitle: Text(
-//           "Pages: ${data['start_page'] ?? 'N/A'} - ${data['end_page'] ?? 'N/A'}",
-//           style: const TextStyle(color: Colors.blue),
-//         ),
-//         children: [
-//           if (level > 0) // Add buttons only for deeper levels
-//             Padding(
-//               padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
-//               child: Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                 children: [
-//                   ElevatedButton(
-//                     onPressed: () {
-//                       // Construct the full database path
-//                       String databasePath =
-//                           "books/${FirebaseAuth.instance.currentUser?.uid}/${widget.bookTitle}/roadmap/$currentPath";
-//                       debugPrint(databasePath);
-//                       Navigator.push(
-//                         context,
-//                         MaterialPageRoute(
-//                           builder: (context) =>
-//                               TextScreen(path: databasePath),
-//                         ),
-//                       );
-//                     },
-//                     style: ElevatedButton.styleFrom(
-//                       backgroundColor: const Color(0xFF00224F),
-//                       shape: RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.circular(12),
-//                       ),
-//                     ),
-//                     child: const Text(
-//                       "View Explanation",
-//                       style: TextStyle(color: Colors.white),
-//                     ),
-//                   ),
-//                   ElevatedButton(
-//                     onPressed: () {
-//                       Fluttertoast.showToast(msg: "Summary for: $title");
-//                     },
-//                     style: ElevatedButton.styleFrom(
-//                       backgroundColor: const Color(0xFF00224F),
-//                       shape: RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.circular(12),
-//                       ),
-//                     ),
-//                     child: const Text(
-//                       "View Summary",
-//                       style: TextStyle(color: Colors.white),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           if (subRoadmap != null)
-//             ..._buildRoadmapWidgets(
-//               Map<String, dynamic>.from(subRoadmap),
-//               level: level + 1,
-//               parentPath: currentPath, // Pass the updated path
-//             ),
-//         ],
-//       ),
-//     );
-//   }).toList();
-// }
-// }
-
-
-
-
-
-// ElevatedButton(
-//   onPressed: () {
-//     Navigator.push(
-//       context,
-//       MaterialPageRoute(
-//         builder: (context) => TextScreen(title: title),
-//       ),
-//     );
-//   },
-//   style: ElevatedButton.styleFrom(
-//     backgroundColor: const Color(0xFF00224F),
-//     shape: RoundedRectangleBorder(
-//       borderRadius: BorderRadius.circular(12),
-//     ),
-//   ),
-//   child: const Text(
-//     "View Explanation",
-//     style: TextStyle(color: Colors.white),
-//   ),
-// ),
-
-//
-// List<Widget> _buildRoadmapWidgets(Map roadmap, {int level = 0}) {
-//   final screenHeight = MediaQuery.of(context).size.height;
-//
-//   // Sort the roadmap by start_page
-//   final sortedRoadmap = roadmap.entries.toList()
-//     ..sort((a, b) {
-//       final aStartPage = (a.value as Map)['start_page'] ?? double.infinity;
-//       final bStartPage = (b.value as Map)['start_page'] ?? double.infinity;
-//       return (aStartPage as num).compareTo(bStartPage as num);
-//     });
-//
-//   return sortedRoadmap.map((entry) {
-//     String title = entry.key.toString();
-//     Map<String, dynamic> data = Map<String, dynamic>.from(entry.value as Map);
-//
-//     // Extract sub-roadmaps if they exist
-//     Map? subRoadmap = data['sub-heading'];
-//
-//     return Card(
-//       elevation: 4,
-//       margin: EdgeInsets.only(bottom: screenHeight * 0.02), // Dynamic margin
-//       child: ExpansionTile(
-//         title:
-//         Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-//         subtitle: Text(
-//           "Pages: ${data['start_page'] ?? 'N/A'} - ${data['end_page'] ?? 'N/A'}",
-//           style: TextStyle(
-//             color: Colors.blue, // Set the text color to green
-//           ),
-//         ),
-//         children: [
-//           if (level > 0) // Add buttons only for levels beyond the first
-//             Padding(
-//               padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
-//               child: Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                 children: [
-//                   ElevatedButton(
-//                     onPressed: () {
-//                       // Construct the path dynamically based on hierarchy
-//                       // String databasePath = "roadmaps/${FirebaseAuth.instance.currentUser?.uid}/${widget.bookTitle}/roadmap";
-//                       String databasePath = "roadmaps/${widget.bookTitle}/roadmap";
-//
-//                       if (level > 1) {
-//                         databasePath += "/$title"; // Include parent topic
-//                       }
-//
-//                       Fluttertoast.showToast(msg: "Path: $databasePath");
-//                     },
-//                     style: ElevatedButton.styleFrom(
-//                       backgroundColor: const Color(0xFF00224F),
-//                       shape: RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.circular(12),
-//                       ),
-//                     ),
-//                     child: const Text(
-//                       "View Explanation",
-//                       style: TextStyle(color: Colors.white),
-//                     ),
-//                   ),
-//                   ElevatedButton(
-//                     onPressed: () {
-//                       Fluttertoast.showToast(msg: "$title");
-//                     },
-//                     style: ElevatedButton.styleFrom(
-//                       backgroundColor: const Color(0xFF00224F),
-//                       shape: RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.circular(12),
-//                       ),
-//                     ),
-//                     child: const Text(
-//                       "View Summary",
-//                       style: TextStyle(color: Colors.white),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           if (subRoadmap != null)
-//             ..._buildRoadmapWidgets(
-//               Map<String, dynamic>.from(subRoadmap),
-//               level: level + 1, // Increase the level for deeper nesting
-//             ),
-//         ],
-//       ),
-//     );
-//   }).toList();
-// }
-// }

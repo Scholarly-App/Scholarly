@@ -83,6 +83,14 @@ class _ReelsScreenState extends State<ReelsScreen> {
         videoUrls = urls;
         isLoading = false; // Hide loading indicator
       });
+      final DatabaseReference dbRef = FirebaseDatabase.instance.ref();
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+      String? userId = _auth.currentUser?.uid;
+
+      await dbRef.child('analytics/$userId').update({
+        'reelsPath': widget.path,
+      });
+
       Navigator.push(
         context,
         MaterialPageRoute(

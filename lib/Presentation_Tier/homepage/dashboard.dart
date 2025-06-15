@@ -3,6 +3,11 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:scholarly_app/Presentation_Tier/bookspage/roadmap_screen.dart';
+import 'package:scholarly_app/Presentation_Tier/bookspage/summary_screen.dart';
+import 'package:scholarly_app/Presentation_Tier/bookspage/text_screen.dart';
+import 'package:scholarly_app/Presentation_Tier/reels/reels_screen.dart';
+import 'package:scholarly_app/Presentation_Tier/reels/view_reel.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -29,8 +34,16 @@ class DashboardState extends State<Dashboard> {
     'assets/icon/books/book7.png',
   ];
 
+  double progressValue = 0;
+
   final TextEditingController NameController =
       TextEditingController(text: "....");
+  final TextEditingController BookController =
+      TextEditingController(text: "................");
+  final TextEditingController RoadmapController =
+      TextEditingController(text: ".............");
+  final TextEditingController StatusController =
+      TextEditingController(text: "..........");
 
 // Helper method to assign dynamic colors to books based on index
   Color _getDynamicColor(int index) {
@@ -60,6 +73,7 @@ class DashboardState extends State<Dashboard> {
     super.initState();
     _fetchUserData();
     fetchBooks();
+    fetchAnalytics();
   }
 
   Future<void> _fetchUserData() async {
@@ -115,6 +129,35 @@ class DashboardState extends State<Dashboard> {
     }
   }
 
+  void fetchAnalytics() async {
+    final user = FirebaseAuth.instance.currentUser;
+    final userId = user?.uid;
+
+    if (userId != null) {
+      final dbRef = FirebaseDatabase.instance.ref('analytics/$userId');
+      final snapshot = await dbRef.get();
+
+      if (snapshot.exists) {
+        final data = snapshot.value as Map<dynamic, dynamic>;
+
+        final title = data['bookTitle']?.toString() ?? '';
+
+        if (title.isNotEmpty) {
+          BookController.text = title;
+          RoadmapController.text = "Roadmap Generated ✅";
+          StatusController.text = "Completed";
+          progressValue = 0.04;
+        }
+      }
+      else{
+        BookController.text = "No Data";
+        RoadmapController.text = "Roadmap Generated ❌";
+        StatusController.text = "Completed";
+        progressValue = 0;
+      }
+    }
+  }
+
   Future<List<String>> getBookNames(String userId) async {
     DatabaseReference booksRef =
         FirebaseDatabase.instance.ref().child("roadmaps").child(userId);
@@ -145,12 +188,20 @@ class DashboardState extends State<Dashboard> {
       print("Error fetching books: $e");
     }
 
+    //If New User and No books Found
+    if(bookNames.isEmpty){
+      bookNames= ["No books Available"];
+    }
+
     return bookNames;
   }
 
   @override
   void dispose() {
     NameController.dispose();
+    BookController.dispose();
+    RoadmapController.dispose();
+    StatusController.dispose();
     super.dispose();
   }
 
@@ -160,14 +211,13 @@ class DashboardState extends State<Dashboard> {
     double appBarHeight = screenHeight * 0.18; // 18% of the screen height
     double booksHeight = screenHeight * 0.18;
     double progressHeight = screenHeight * 0.28;
-    double recentHeight = screenHeight * 0.18;
+    double recentHeight = screenHeight * 0.17;
 
     return Scaffold(
       backgroundColor: Color(0xFF00224F),
       body: SingleChildScrollView(
         child: Container(
-          // Optional: Add padding at the top if needed
-          padding: EdgeInsets.only(top: 16.0),
+          padding: EdgeInsets.only(top: 8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -275,10 +325,9 @@ class DashboardState extends State<Dashboard> {
                                 books[index]['name']!,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  fontSize: 12,
-                                    fontWeight: FontWeight.bold
-                                  // fontWeight: FontWeight.w600,
-                                ),
+                                    fontSize: 12, fontWeight: FontWeight.bold
+                                    // fontWeight: FontWeight.w600,
+                                    ),
                               ),
                             ],
                           ),
@@ -343,16 +392,16 @@ class DashboardState extends State<Dashboard> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Fundamentals of Operating Systems',
+                                        BookController.text,
                                         style: TextStyle(
-                                          fontSize: 14,
+                                          fontSize: 18,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black,
                                         ),
                                         softWrap: true,
                                       ),
                                       Text(
-                                        '# 20 out of 75 topics',
+                                        RoadmapController.text,
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: Colors.black,
@@ -361,7 +410,7 @@ class DashboardState extends State<Dashboard> {
                                         softWrap: true,
                                       ),
                                       Text(
-                                        'Completed',
+                                        StatusController.text,
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: Colors.black,
@@ -384,7 +433,7 @@ class DashboardState extends State<Dashboard> {
                               height: 6,
                               // Adjust the height to make the progress bar thicker
                               child: LinearProgressIndicator(
-                                value: 0.6,
+                                value: progressValue,
                                 // Set your progress value here (0.0 to 1.0)
                                 backgroundColor: Colors.grey[300],
                                 // Background color of the progress bar
@@ -402,9 +451,65 @@ class DashboardState extends State<Dashboard> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 ElevatedButton(
-                                  onPressed: () {
-                                    // Define the action when the button is pressed
-                                    print('Button pressed!');
+                                  onPressed: () async {
+                                    final user =
+                                        FirebaseAuth.instance.currentUser;
+                                    final userId = user?.uid;
+
+                                    if (userId != null) {
+                                      final dbRef = FirebaseDatabase.instance
+                                          .ref('analytics/$userId');
+                                      final snapshot = await dbRef.get();
+
+                                      if (snapshot.exists) {
+                                        final data = snapshot.value
+                                            as Map<dynamic, dynamic>;
+
+                                        final title =
+                                            data['bookTitle']?.toString() ?? '';
+
+                                        if (title.isNotEmpty) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  RoadmapScreen(
+                                                      bookTitle: title),
+                                            ),
+                                          );
+                                        } else {
+                                          Fluttertoast.showToast(
+                                            msg: "Unable to Resume",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 14.0,
+                                          );
+                                        }
+                                      } else {
+                                        Fluttertoast.showToast(
+                                          msg: "No Data Found",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.red,
+                                          textColor: Colors.white,
+                                          fontSize: 14.0,
+                                        );
+                                      }
+                                    } else {
+                                      Fluttertoast.showToast(
+                                        msg: "Unable to Retrieve User Data",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 14.0,
+                                      );
+                                    }
                                   },
                                   style: ElevatedButton.styleFrom(
                                     foregroundColor: Colors.white,
@@ -436,125 +541,228 @@ class DashboardState extends State<Dashboard> {
                 ),
               ),
               Container(
-                height: recentHeight,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      top: 12.0, bottom: 8.0, left: 12.0, right: 12.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        width: (MediaQuery.of(context).size.width - 60) / 2,
-                        height: 300,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFff9a62),
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 10,
-                              offset: Offset(0, 4),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0, vertical: 12.0),
+                child: Column(
+                  children: [
+                    // Resume Topic Button
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12.0),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(12.0),
+                        elevation: 3,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(12.0),
+                          onTap: () async {
+                            final user = FirebaseAuth.instance.currentUser;
+                            final userId = user?.uid;
+
+                            if (userId != null) {
+                              final dbRef = FirebaseDatabase.instance
+                                  .ref('analytics/$userId');
+                              final snapshot = await dbRef.get();
+
+                              if (snapshot.exists) {
+                                final data =
+                                    snapshot.value as Map<dynamic, dynamic>;
+
+                                final path = data['textPath']?.toString() ?? '';
+                                final screen = data['screen']?.toInt() ?? 0;
+
+                                if (path.isNotEmpty) {
+                                  if (screen == 1) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            TextScreen(path: path),
+                                      ),
+                                    );
+                                  } else if (screen == 2) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            SummaryScreen(path: path),
+                                      ),
+                                    );
+                                  }
+                                } else {
+                                  Fluttertoast.showToast(
+                                    msg: "Unable to Resume Topic",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 14.0,
+                                  );
+                                }
+                              } else {
+                                Fluttertoast.showToast(
+                                  msg: "No Data Found",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 14.0,
+                                );
+                              }
+                            } else {
+                              Fluttertoast.showToast(
+                                msg: "Unable to Retrieve User Data",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 14.0,
+                              );
+                            }
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 20.0, horizontal: 16.0),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFff9a62),
+                              borderRadius: BorderRadius.circular(12.0),
                             ),
-                          ],
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Title
-                            Padding(
-                              padding: EdgeInsets.only(top: 8.0, left: 12.0),
-                              child: Text(
-                                'Resume Topic:',
-                                style: TextStyle(
-                                  color: Color(0xFF00224F), // Text color
-                                  fontFamily: 'San Fransisco',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Iconsax.document_copy,
+                                  size: 28,
+                                  color: const Color(0xFF00224F),
                                 ),
-                              ),
+                                const SizedBox(width: 12),
+                                Text(
+                                  'Resume Recent Topic',
+                                  style: TextStyle(
+                                    color: const Color(0xFF00224F),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Icon(
+                                  Icons.chevron_right,
+                                  color: const Color(0xFF00224F),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
-                      Container(
-                        width: (MediaQuery.of(context).size.width - 60) / 2,
-                        height: 300,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF93dafa),
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 10,
-                              offset: Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Title
-                            Padding(
-                              padding: EdgeInsets.only(top: 8.0, left: 12.0),
-                              child: Text(
-                                'Resume Reel:',
+                    ),
+
+                    // Resume Reel Button
+                    Material(
+                      borderRadius: BorderRadius.circular(12.0),
+                      elevation: 3,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(12.0),
+                        onTap: () async {
+                          final user = FirebaseAuth.instance.currentUser;
+                          final userId = user?.uid;
+
+                          if (userId != null) {
+                            final dbRef = FirebaseDatabase.instance
+                                .ref('analytics/$userId');
+                            final snapshot = await dbRef.get();
+
+                            if (snapshot.exists) {
+                              final data =
+                                  snapshot.value as Map<dynamic, dynamic>;
+
+                              final path = data['reelsPath']?.toString() ?? '';
+
+                              if (path.isNotEmpty) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ReelsScreen(
+                                      summaryText: '',
+                                      path: path,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                Fluttertoast.showToast(
+                                  msg: "Unable to Resume Reels",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 14.0,
+                                );
+                              }
+                            } else {
+                              Fluttertoast.showToast(
+                                msg: "No Data Found",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 14.0,
+                              );
+                            }
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: "Unable to Retrieve User Data",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 14.0,
+                            );
+                          }
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 20.0, horizontal: 16.0),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF93dafa),
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.play_circle_outline,
+                                size: 28,
+                                color: const Color(0xFF00224F),
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                'Resume Previous Reels',
                                 style: TextStyle(
-                                  color: Color(0xFF00224F), // Text color
-                                  fontFamily: 'San Fransisco',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+                                  color: const Color(0xFF00224F),
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Iconsax.play_circle_copy,
-                                    size: 40,
-                                  )
-                                ],
+                              const Spacer(),
+                              Icon(
+                                Icons.chevron_right,
+                                color: const Color(0xFF00224F),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ),
+              )
             ],
           ),
         ),
       ),
     );
   }
-}
-
-@override
-Widget build1(BuildContext context) {
-  return Scaffold(
-    backgroundColor: Color(0xFF00224F),
-    body: LayoutBuilder(
-      builder: (context, constraints) {
-        double screenHeight = constraints.maxHeight;
-        double screenWidth = constraints.maxWidth;
-        double textScale = MediaQuery.of(context).textScaleFactor;
-
-        return SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [],
-            ),
-          ),
-        );
-      },
-    ),
-  );
 }
