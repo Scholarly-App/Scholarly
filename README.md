@@ -133,6 +133,15 @@ flutter run
 
 ## 🧠 Local Server Setup
 
+### Note
+- In the below steps you will need to download multiple models and place them in different folder
+- The download scripts for the models can be found in the
+```plaintext
+Scholarly Local Host/Model_Downloads/
+```
+
+
+
 ### 1️⃣ Create Python Virtual Environment & Install Dependencies
 
 Navigate to Scholarly Local Host Folder and run:
@@ -193,6 +202,15 @@ Open C:\Users\YourUsername\AppData\Local\Microsoft\Windows\Fonts
 Drag and drop your font files (.ttf, .otf) into this folder.
 Double-click the font files and click Install.
 
+```
+
+Next Download the Whisper Base model from Hugging Face:  
+   👉 https://huggingface.co/openai/whisper-base
+
+and Place the downloaded model inside:
+
+```plaintext
+Scholarly Local Host/Video Generation/whisper
 ```
 
 ---
@@ -287,10 +305,7 @@ python mcq-app.py
 ---
 
 ✅ **Your local server is now fully set up and functional.
-Now Finally Get your IP Address that should look like this 192.168.10.0 
-and in the Android Studio Navigate to lib/config.dart and update your IP Address
-static const String baseUrl = 'http://192.168.10.0';
-Remember to Replace the IP Address with your current IP Address
+- Now Finally Get your IP Address that should look like this 192.168.10.0  and in the Android Studio Navigate to lib/config.dart and update your IP Address:
+- static const String baseUrl = 'http://192.168.10.0';
+- Remember to Replace the IP Address with your current IP Address
 **
-
-
