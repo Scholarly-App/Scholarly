@@ -75,7 +75,7 @@ The core objective of this project is to solve students’ issue of losing focus
 
 ---
 ## 📱 Execution Guide
-To simply run the app on your mobile device, download and install the APK for the latest release on this GitHub Repo
+To simply run the app on your mobile device, download and install the APK from the latest release on this GitHub Repo
 
 ---
 
@@ -93,9 +93,9 @@ Before getting started, ensure you have the following installed:
 
 ### 📥 Clone the Repository
 
-\`\`\`bash
+```bash
 git clone https://github.com/Scholarly-App/Scholarly.git
-\`\`\`
+```
 
 Open the cloned repository in **Android Studio**.
 
