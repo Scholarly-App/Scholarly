@@ -67,19 +67,6 @@ The core objective of this project is to solve students’ issue of losing focus
   <img src="User Interface/Educational%20Video%20Sample.jpg" alt="Educational Video Screen" width="30%" />
 </p>
 
-[//]: # (<p align="center">)
-
-[//]: # (  <img src="User Interface/Expanded%20Roadmap%20Screen.jpg" alt="Expanded Roadmap Screen" width="30%" />)
-
-[//]: # (  <img src="User Interface/Text%20Explanation%20Screen.jpg" alt="Textual Explanation Screen" width="30%" />)
-
-[//]: # (  <img src="User Interface/Generated%20Summary%20Screen.jpg" alt="Summary Screen" width="30%" />)
-
-[//]: # (</p>)
-
-<!-- Add images here -->
-<!-- Example: ![Home Screen](screenshots/home.png) -->
-
 ---
 
 ## 🎥 Demo Video
@@ -87,8 +74,221 @@ The core objective of this project is to solve students’ issue of losing focus
 [Watch Demo](https://drive.google.com/file/d/1Aw8m-Wu0kFfK9iP9vpdW6Zz2pP6tbizq/view?usp=sharing)
 
 ---
+## 📱 Execution Guide
+To simply run the app on your mobile device, download and install the APK for the latest release on this GitHub Repo
+
+---
 
 ## ⚙️ Installation Guide
 
-<!-- Add installation instructions here -->
+### 🧩 Prerequisites
+
+Before getting started, ensure you have the following installed:
+
+- [Flutter SDK](https://flutter.dev/docs/get-started/install)
+- [Android Studio](https://developer.android.com/studio)
+- [Git](https://git-scm.com/downloads)
+
+---
+
+### 📥 Clone the Repository
+
+\`\`\`bash
+git clone https://github.com/Scholarly-App/Scholarly.git
+\`\`\`
+
+Open the cloned repository in **Android Studio**.
+
+---
+
+### 📦 Install Flutter Dependencies
+
+\`\`\`bash
+flutter pub get
+\`\`\`
+
+---
+
+### 🔥 Firebase Configuration
+
+1. Go to [Firebase Console](https://console.firebase.google.com/).
+2. Create a new project.
+3. Click on **Add App** and choose **Android**.
+4. Register your app using your app's package name (e.g., \`com.example.scholarly\`).
+5. Download the \`google-services.json\` file.
+6. Place it in your project at:
+
+\`\`\`plaintext
+android/app/google-services.json
+\`\`\`
+
+7. Enable **Firestore** and **Realtime Database** if required.
+8. Go to **Project Settings > General** and make sure **Google Analytics** is enabled (optional but recommended).
+
+---
+
+### ▶️ Run the App
+
+\`\`\`bash
+flutter run
+\`\`\`
+
+---
+
+## 🧠 Local Server Setup
+
+### 1️⃣ Create Python Virtual Environment & Install Dependencies
+
+Navigate to the root folder of the local server (not the Flutter app) and run:
+
+\`\`\`bash
+python -m venv env
+source env/bin/activate  # For Linux/macOS
+env\Scripts\activate     # For Windows
+
+pip install -r requirements.txt
+\`\`\`
+
+---
+
+### 📘 Download and Configure the Summarization Model
+
+1. Download the BART large CNN model from Hugging Face:  
+   👉 https://huggingface.co/facebook/bart-large-cnn
+
+2. Place the downloaded model inside:
+
+\`\`\`plaintext
+bart_large_cnn_local/
+\`\`\`
+
+3. Update the **model path** in \`summarize.py\` to point to the correct path on your system.
+
+---
+
+### 🎞️ Video Generation Setup
+
+Navigate to the \`Video Generation\` folder and:
+
+#### 1. Create & Activate a New Virtual Environment:
+
+\`\`\`bash
+python -m venv env
+source env/bin/activate  # For Linux/macOS
+env\Scripts\activate     # For Windows
+\`\`\`
+
+#### 2. Install Requirements:
+
+\`\`\`bash
+pip install -r requirements.txt
+\`\`\`
+
+#### 3. Install Fonts (Linux/macOS):
+
+\`\`\`bash
+mkdir -p ~/.local/share/fonts
+cp fonts/* ~/.local/share/fonts/
+fc-cache -f -v
+\`\`\`
+
+---
+
+### 📦 Download Additional Models
+
+#### 📌 Question-Answer Pair Generator
+
+Download from:  
+[🔗 Download Link](https://drive.google.com/file/d/1xMUmYbwSxGQoEeUSm95KyOKPei_DmEml/view?usp=drive_link)  
+Unzip and place the model in the appropriate directory as described in \`app/models\`.
+
+---
+
+#### 📌 Race-Distractors Model
+
+Download from:  
+[🔗 Download Link](https://drive.google.com/file/d/1tXHVmXkSLz5qFoDTnAQ17oBDvMXE0YnC/view?usp=drive_link)  
+Place it in the specified directory inside \`app/models\`.
+
+---
+
+#### 📌 Sense2Vec Model
+
+Download from:  
+[🔗 Download Link](https://github.com/explosion/sense2vec/releases/download/v1.0.0/s2v_reddit_2015_md.tar.gz)  
+Extract it and place the \`s2v_old\` folder inside the required directory.
+
+---
+
+## 🖥️ Run Local Server Functionalities
+
+Each functionality should be run in a **separate terminal**, and make sure the environment is activated in each.
+
+---
+
+### 📘 Upload Book
+
+\`\`\`bash
+source env/bin/activate        # or env\Scripts\activate (Windows)
+python upload-book.py
+\`\`\`
+
+---
+
+### 📘 Summary Generation
+
+\`\`\`bash
+source env/bin/activate
+python summarize.py
+\`\`\`
+
+---
+
+### 🎬 Reels Generation
+
+\`\`\`bash
+source env/bin/activate
+cd Video Generation
+python generate-reels.py
+\`\`\`
+
+---
+
+### 🌐 Serve Reels
+
+\`\`\`bash
+source env/bin/activate
+cd Video Generation
+python serve-reels.py
+\`\`\`
+
+---
+
+### ❓ Question/MCQ Generation
+
+Navigate to the \`Question Generation\` folder in the root of your local server:
+
+#### 1. Create & Activate a Virtual Environment:
+
+\`\`\`bash
+python -m venv env
+source env/bin/activate  # or env\Scripts\activate (Windows)
+\`\`\`
+
+#### 2. Install Dependencies:
+
+\`\`\`bash
+pip install -r requirements.txt
+\`\`\`
+
+#### 3. Run the MCQ Generator App:
+
+\`\`\`bash
+python mcq-app.py
+\`\`\`
+
+---
+
+✅ **Your local server is now fully set up and functional. Connect your Flutter frontend with the respective API endpoints to start testing the complete Scholarly experience.**
+
 
