@@ -134,11 +134,8 @@ flutter run
 ## 🧠 Local Server Setup
 
 ### Note
-- In the below steps you will need to download multiple models and place them in different folder
-- The download scripts for the models can be found in the
-```plaintext
-Scholarly Local Host/Model_Downloads/
-```
+In the below steps you will need to download multiple models and place them in different folder
+The download scripts for the models can be found in the `Scholarly Local Host/Model_Downloads/`
 
 
 
