@@ -16,7 +16,6 @@ The core objective of this project is to solve students’ issue of losing focus
 
 ---
 
-
 ## 🛠 Tech Stack
 
 - Python
@@ -46,6 +45,37 @@ The core objective of this project is to solve students’ issue of losing focus
 ---
 
 ## 📱 Sample UI Screens
+<p align="center">
+  <img src="User Interface/Splash%20Screen.jpg" alt="Splash Screen" width="30%" />
+  <img src="User Interface/Login%20Screen.jpg" alt="Login Screen" width="30%" />
+  <img src="User Interface/Home%20Screen.jpg" alt="Home Screen" width="30%" />
+</p>
+<p align="center">
+  <img src="User Interface/Upload%20Book%20Screen.jpg" alt="Upload Books Screen" width="30%" />
+  <img src="User Interface/User%20Books%20Screen.jpg" alt="User Books Screen" width="30%" />
+  <img src="User Interface/Roadmap%20Screen.jpg" alt="Roadmap Screen" width="30%" />
+</p>
+<p align="center">
+  <img src="User Interface/Expanded%20Roadmap%20Screen.jpg" alt="Expanded Roadmap Screen" width="30%" />
+  <img src="User Interface/Text%20Explanation%20Screen.jpg" alt="Textual Explanation Screen" width="30%" />
+  <img src="User Interface/Generated%20Summary%20Screen.jpg" alt="Summary Screen" width="30%" />
+</p>
+
+<p align="center">
+  <img src="User Interface/Quiz%20Screen.jpg" alt="Quiz Screen" width="30%" />
+  <img src="User Interface/Meme%20Video%20Sample.jpg" alt="Meme Video Screen" width="30%" />
+  <img src="User Interface/Educational%20Video%20Sample.jpg" alt="Educational Video Screen" width="30%" />
+</p>
+
+[//]: # (<p align="center">)
+
+[//]: # (  <img src="User Interface/Expanded%20Roadmap%20Screen.jpg" alt="Expanded Roadmap Screen" width="30%" />)
+
+[//]: # (  <img src="User Interface/Text%20Explanation%20Screen.jpg" alt="Textual Explanation Screen" width="30%" />)
+
+[//]: # (  <img src="User Interface/Generated%20Summary%20Screen.jpg" alt="Summary Screen" width="30%" />)
+
+[//]: # (</p>)
 
 <!-- Add images here -->
 <!-- Example: ![Home Screen](screenshots/home.png) -->
