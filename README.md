@@ -103,9 +103,9 @@ Open the cloned repository in **Android Studio**.
 
 ### 📦 Install Flutter Dependencies
 
-\`\`\`bash
+```bash
 flutter pub get
-\`\`\`
+```
 
 ---
 
@@ -113,25 +113,21 @@ flutter pub get
 
 1. Go to [Firebase Console](https://console.firebase.google.com/).
 2. Create a new project.
-3. Click on **Add App** and choose **Android**.
-4. Register your app using your app's package name (e.g., \`com.example.scholarly\`).
+3. Create a Realtime Database
+4. Next Install Firebase CLI and Register the app using Firebase CLI in your Android Studio Terminal
 5. Download the \`google-services.json\` file.
 6. Place it in your project at:
 
-\`\`\`plaintext
+```plaintext
 android/app/google-services.json
-\`\`\`
-
-7. Enable **Firestore** and **Realtime Database** if required.
-8. Go to **Project Settings > General** and make sure **Google Analytics** is enabled (optional but recommended).
-
+```
 ---
 
 ### ▶️ Run the App
 
-\`\`\`bash
+```bash
 flutter run
-\`\`\`
+```
 
 ---
 
@@ -139,15 +135,15 @@ flutter run
 
 ### 1️⃣ Create Python Virtual Environment & Install Dependencies
 
-Navigate to the root folder of the local server (not the Flutter app) and run:
+Navigate to Scholarly Local Host Folder and run:
 
-\`\`\`bash
-python -m venv env
-source env/bin/activate  # For Linux/macOS
-env\Scripts\activate     # For Windows
+```bash
+python -m venv scholarly
+source scholarly/bin/activate  # For Linux/macOS
+scholarly\Scripts\activate     # For Windows
 
 pip install -r requirements.txt
-\`\`\`
+```
 
 ---
 
@@ -158,39 +154,38 @@ pip install -r requirements.txt
 
 2. Place the downloaded model inside:
 
-\`\`\`plaintext
+```plaintext
 bart_large_cnn_local/
-\`\`\`
+```
 
-3. Update the **model path** in \`summarize.py\` to point to the correct path on your system.
+3. Update the **model path** in `summarize.py` to point to the correct path on your system.
 
 ---
 
 ### 🎞️ Video Generation Setup
 
-Navigate to the \`Video Generation\` folder and:
+Navigate to the `Video Generation` folder and:
 
 #### 1. Create & Activate a New Virtual Environment:
 
-\`\`\`bash
-python -m venv env
-source env/bin/activate  # For Linux/macOS
-env\Scripts\activate     # For Windows
-\`\`\`
+```bash
+python -m venv video_gen
+source video_gen/bin/activate  # For Linux/macOS
+video_gen\Scripts\activate     # For Windows
+```
 
 #### 2. Install Requirements:
 
-\`\`\`bash
+```bash
 pip install -r requirements.txt
-\`\`\`
+```
 
 #### 3. Install Fonts (Linux/macOS):
 
-\`\`\`bash
+```bash
 mkdir -p ~/.local/share/fonts
-cp fonts/* ~/.local/share/fonts/
-fc-cache -f -v
-\`\`\`
+cp fonts/* ~/.local/share/fonts/ && fc-cache -f -v
+```
 
 ---
 
