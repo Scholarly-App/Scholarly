@@ -138,7 +138,7 @@ flutter run
 Navigate to Scholarly Local Host Folder and run:
 
 ```bash
-python -m venv scholarly
+python -m venv scholarly python=3.12
 source scholarly/bin/activate  # For Linux/macOS
 scholarly\Scripts\activate     # For Windows
 
@@ -169,9 +169,44 @@ Navigate to the `Video Generation` folder and:
 #### 1. Create & Activate a New Virtual Environment:
 
 ```bash
-python -m venv video_gen
+python -m venv video_gen 
 source video_gen/bin/activate  # For Linux/macOS
 video_gen\Scripts\activate     # For Windows
+```
+
+#### 2. Install Requirements:
+
+```bash
+winget install ffmpeg
+python -m spacy download en_core_web_sm
+set PEXELS_API_KEY= "Your PEXELS API KEY"
+```
+
+#### 3. Install Fonts (Linux/macOS):
+
+```bash
+mkdir -p ~/.local/share/fonts
+cp fonts/* ~/.local/share/fonts/ && fc-cache -f -v
+
+If you are using Windows
+Open C:\Users\YourUsername\AppData\Local\Microsoft\Windows\Fonts
+Drag and drop your font files (.ttf, .otf) into this folder.
+Double-click the font files and click Install.
+
+```
+
+---
+
+### ❓ Question Generation Setup
+
+Navigate to the `Question Generation` folder and:
+
+#### 1. Create & Activate a New Virtual Environment:
+
+```bash
+python -m venv q_gen python=3.8
+source q_gen/bin/activate  # For Linux/macOS
+q_gen\Scripts\activate     # For Windows
 ```
 
 #### 2. Install Requirements:
@@ -180,38 +215,14 @@ video_gen\Scripts\activate     # For Windows
 pip install -r requirements.txt
 ```
 
-#### 3. Install Fonts (Linux/macOS):
+### 3. Download Additional Models
 
-```bash
-mkdir -p ~/.local/share/fonts
-cp fonts/* ~/.local/share/fonts/ && fc-cache -f -v
-```
-
----
-
-### 📦 Download Additional Models
-
-#### 📌 Question-Answer Pair Generator
-
-Download from:  
-[🔗 Download Link](https://drive.google.com/file/d/1xMUmYbwSxGQoEeUSm95KyOKPei_DmEml/view?usp=drive_link)  
-Unzip and place the model in the appropriate directory as described in \`app/models\`.
-
----
-
-#### 📌 Race-Distractors Model
-
-Download from:  
-[🔗 Download Link](https://drive.google.com/file/d/1tXHVmXkSLz5qFoDTnAQ17oBDvMXE0YnC/view?usp=drive_link)  
-Place it in the specified directory inside \`app/models\`.
-
----
-
-#### 📌 Sense2Vec Model
-
-Download from:  
-[🔗 Download Link](https://github.com/explosion/sense2vec/releases/download/v1.0.0/s2v_reddit_2015_md.tar.gz)  
-Extract it and place the \`s2v_old\` folder inside the required directory.
+- Go to "Question Generation/app/ml_models"
+- You will find directories for each models that you need to configure.
+- Follow the links and steps provided in the README file available in the subdirectories of the 'models' directory, i.e. `Question Generation/app/ml_models/<subdirectory>`
+- Or, Directly download [T5 fine-tuned on SQuAD for Question-Answer Pair Generation here](https://drive.google.com/file/d/1xMUmYbwSxGQoEeUSm95KyOKPei_DmEml/view?usp=drive_link), unzip and place it in `Question Generation/app/ml_models/question_generation/models`.
+- Download [T5 fine-tuned on RACE dataset for Distractor here](https://drive.google.com/file/d/1tXHVmXkSLz5qFoDTnAQ17oBDvMXE0YnC/view?usp=drive_link), unzip and place in `Question Generation/app/ml_models/distractor_generation/models`.
+- Download [s2v-2015 here](https://github.com/explosion/sense2vec/releases/download/v1.0.0/s2v_reddit_2015_md.tar.gz), unzip and place `s2v_old` folder in `Question Generation/app/ml_models/sense2vec_distractor_generation/data`
 
 ---
 
@@ -223,64 +234,55 @@ Each functionality should be run in a **separate terminal**, and make sure the e
 
 ### 📘 Upload Book
 
-\`\`\`bash
-source env/bin/activate        # or env\Scripts\activate (Windows)
+```bash
+source scholarly/bin/activate
+scholarly\Scripts\activate (Windows)
 python upload-book.py
-\`\`\`
+```
 
 ---
 
 ### 📘 Summary Generation
 
-\`\`\`bash
-source env/bin/activate
+```bash
+source scholarly/bin/activate
+scholarly\Scripts\activate (Windows)
 python summarize.py
-\`\`\`
+```
 
 ---
 
 ### 🎬 Reels Generation
 
-\`\`\`bash
-source env/bin/activate
+```bash
 cd Video Generation
+source video_gen/bin/activate
+video_gen\Scripts\activate (Windows)
 python generate-reels.py
-\`\`\`
+```
+If you face any issues regarding the whisper model, you can manually download it and place it in the 
 
 ---
 
 ### 🌐 Serve Reels
 
-\`\`\`bash
-source env/bin/activate
+```bash
 cd Video Generation
+source video_gen/bin/activate
+video_gen\Scripts\activate (Windows)
 python serve-reels.py
-\`\`\`
+```
 
 ---
 
-### ❓ Question/MCQ Generation
+### ❓ Quiz/MCQ Generation
 
-Navigate to the \`Question Generation\` folder in the root of your local server:
-
-#### 1. Create & Activate a Virtual Environment:
-
-\`\`\`bash
-python -m venv env
-source env/bin/activate  # or env\Scripts\activate (Windows)
-\`\`\`
-
-#### 2. Install Dependencies:
-
-\`\`\`bash
-pip install -r requirements.txt
-\`\`\`
-
-#### 3. Run the MCQ Generator App:
-
-\`\`\`bash
+```bash
+cd Question Generation
+source q_gen/bin/activate
+q_gen\Scripts\activate (Windows)
 python mcq-app.py
-\`\`\`
+```
 
 ---
 
